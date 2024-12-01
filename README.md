@@ -1,4 +1,4 @@
-# YouTube Comment Sentiment Analysis and Visualization
+# YouTube Comment Sentiment Analyzer
 
 link:
 ```bash
