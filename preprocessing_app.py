@@ -2,6 +2,7 @@ import nltk
 nltk.download('stopwords')
 nltk.download('vader_lexicon')
 nltk.download('punkt')
+nltk.download('punkt_tab')
 from nltk import word_tokenize
 from nltk.sentiment.vader import SentimentIntensityAnalyzer  
 from nltk.corpus import stopwords   
