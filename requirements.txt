@@ -1,4 +1,4 @@
-﻿absl-py==2.1.0
+absl-py==2.1.0
 altair==5.4.1
 annotated-types==0.7.0
 asttokens==2.4.1
@@ -71,7 +71,7 @@ namex==0.0.8
 narwhals==1.9.4
 nest-asyncio==1.6.0
 nltk==3.9.1
-numpy==2.0.0
+numpy==1.26.4  # Downgraded to avoid conflict with gensim
 opt_einsum==3.4.0
 optree==0.13.1
 packaging==24.1
