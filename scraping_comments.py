@@ -2,14 +2,9 @@ import pandas as pd
 from googleapiclient.discovery import build
 import streamlit as st
 
-st.cache_data
+@st.cache_data
 def scraper(api_key,video_url) :
     video_id = video_url.split('v=')[1]
-    api_service_name = "youtube"
-    api_version = "v3"
-    DEVELOPER_KEY = api_key
-
-
     # Build the YouTube Data API client
     youtube = build('youtube', 'v3', developerKey=api_key)
 

@@ -1,27 +1,16 @@
-from deep_translator import GoogleTranslator
-import pandas as pd
 from nltk import word_tokenize
 from nltk.sentiment.vader import SentimentIntensityAnalyzer  
 from nltk.corpus import stopwords   
-from string import punctuation
-import seaborn as sns
-import matplotlib.pyplot as plt
-from wordcloud import WordCloud
 import json
-import streamlit as st 
 import re
 # Initialization of objects that don't need to be recreated each time
 stop_words = stopwords.words('english')
 sent_analyzer = SentimentIntensityAnalyzer()  # Sentiment analysis instance
-translator = GoogleTranslator(source='auto', target='en')  # Translator instance
+
 
 # Global DataFrame (for the purpose of this example)
 df = 'temp'
 
-
-# Function to translate text to English
-# def translate_to_english(text):
-#     return translator.translate(text)
 
 
 # Function to get sentiment score for text

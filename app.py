@@ -1,16 +1,14 @@
 import streamlit as st
-import pandas as pd
-
 from gensim import corpora
 from gensim.models import LdaModel
 import google.generativeai as genai
-import os
 from wordcloud import WordCloud
-import matplotlib.pyplot as plt, seaborn as sns
+import matplotlib.pyplot as plt
+import seaborn as sns
 from scraping_comments import scraper
 from preprocessing_app import clean_with_timestamp,get_sentiment, preprocess_text, print_topics, generate_summary
 import requests
-import re
+
 
 
 if 'show_data' not in st.session_state:
@@ -231,7 +229,6 @@ get_data = st.button("Fetch Comments")
 
 if youtube_api and gemini_api and video_url:
     df = cached_scraper(youtube_api, video_url)
-    # df['english_comm'] = df['comment'].apply(translate_to_english)
     
     df['english_comm'] = df['english_comm'].apply(clean_with_timestamp)
     df['english_comm'] = df['english_comm'].str.replace('&#39;', "'", regex=False)
