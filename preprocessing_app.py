@@ -1,10 +1,11 @@
+import nltk
+nltk.download('stopwords')
+nltk.download('vader_lexicon')
 from nltk import word_tokenize
 from nltk.sentiment.vader import SentimentIntensityAnalyzer  
 from nltk.corpus import stopwords   
 import json
 import re
-import nltk
-nltk.download('stopwords')
 # Initialization of objects that don't need to be recreated each time
 stop_words = stopwords.words('english')
 sent_analyzer = SentimentIntensityAnalyzer()  # Sentiment analysis instance
