@@ -1,4 +1,4 @@
-# YouTube Comment Sentiment Analyzer
+# YouTube Comments Sentiment Analyzer
 
 link:
 ```bash
