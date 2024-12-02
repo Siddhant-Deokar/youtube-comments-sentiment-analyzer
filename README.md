@@ -114,7 +114,6 @@ The project requires the following Python libraries:
 * Scikit-learn
 * Plotly
 * TextBlob
-* Pytube
 * Gensim
   
 These are specified in the requirements.txt file.
