@@ -1,4 +1,4 @@
-from nltk import word_tokenize, WordNetLemmatizer
+from nltk import word_tokenize
 from nltk.sentiment.vader import SentimentIntensityAnalyzer  
 from nltk.corpus import stopwords   
 import json
@@ -11,7 +11,7 @@ nltk.download('punkt_tab')
 nltk.download('wordnet')
 stop_words = stopwords.words('english')
 
-lemmatizer = WordNetLemmatizer()
+
 
 sent_analyzer = SentimentIntensityAnalyzer()  # Sentiment analysis instance
 
@@ -73,7 +73,7 @@ def preprocess_text(text):
     tokens = word_tokenize(text.lower())
         
     # Remove stopwords and non-alphanumeric tokens, but preserve placeholders
-    tokens = [lemmatizer.lemmatize(word) for word in tokens if word not in stop_words and (word.isalnum() or 'TIMESTAMP' in word)]
+    tokens = [word for word in tokens if word not in stop_words and (word.isalnum() or 'TIMESTAMP' in word)]
 
     
     # Restore timestamps by replacing placeholders with actual timestamps
