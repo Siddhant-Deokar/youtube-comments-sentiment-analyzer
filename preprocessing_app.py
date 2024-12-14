@@ -73,7 +73,8 @@ def preprocess_text(text):
     tokens = word_tokenize(text.lower())
         
     # Remove stopwords and non-alphanumeric tokens, but preserve placeholders
-    tokens = [lemmatizer.lemmatize(word) for word in tokens if word not in stop_words and word.isalnum() or 'TIMESTAMP' in word]
+    tokens = [lemmatizer.lemmatize(word) for word in tokens if word not in stop_words and (word.isalnum() or 'TIMESTAMP' in word)]
+
     
     # Restore timestamps by replacing placeholders with actual timestamps
     for idx, timestamp in enumerate(timestamps):
