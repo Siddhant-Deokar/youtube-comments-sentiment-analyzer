@@ -5,6 +5,7 @@ import json
 import re
 import nltk
 # Initialization of objects that don't need to be recreated each time
+nltk.download('vader_lexicon')
 nltk.download('stopwords')
 stop_words = stopwords.words('english')
 
