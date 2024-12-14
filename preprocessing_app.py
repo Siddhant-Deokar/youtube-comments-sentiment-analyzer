@@ -1,18 +1,15 @@
-import nltk
-# nltk.download('stopwords')
-# nltk.download('vader_lexicon')
-# nltk.download('punkt')
-nltk.download('all')
 from nltk import word_tokenize
 from nltk.sentiment.vader import SentimentIntensityAnalyzer  
 from nltk.corpus import stopwords   
 import json
 import re
+import spacy
 # Initialization of objects that don't need to be recreated each time
 stop_words = stopwords.words('english')
+
 sent_analyzer = SentimentIntensityAnalyzer()  # Sentiment analysis instance
 
-
+nlp = spacy.load('en_core_web_md')
 # Global DataFrame (for the purpose of this example)
 df = 'temp'
 
@@ -29,7 +26,7 @@ def get_sentiment(text):
         return "Neutral"
 
 def clean_with_timestamp(comment):
-    comment = comment.replace('<br>','')
+
     comment = comment.lower()
     if ('<a' in comment) and ('</a>' in comment):
         timestamp_pattern = r'<a[^>]*>(\d{1,2}:\d{2})</a>'
@@ -67,10 +64,12 @@ def preprocess_text(text):
         text = text.replace(timestamp, f'__TIMESTAMP_{idx}__')
 
     # Tokenize the text
-    tokens = word_tokenize(text.lower())
+    doc = nlp(text.lower()) 
+
+    
     
     # Remove stopwords and non-alphanumeric tokens, but preserve placeholders
-    tokens = [word for word in tokens if word not in stop_words and word.isalnum() or 'TIMESTAMP' in word]
+    tokens = [word.lemma_ for word in doc if word.text not in stop_words and (word.text.isalnum() or 'TIMESTAMP' in word.text)]
     
     # Restore timestamps by replacing placeholders with actual timestamps
     for idx, timestamp in enumerate(timestamps):

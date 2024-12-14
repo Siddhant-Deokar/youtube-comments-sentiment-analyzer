@@ -21,7 +21,7 @@ if 'show_trend' not in st.session_state:
     st.session_state.show_trend = True
 
 
-@st.cache_data
+
 def get_video_info(video_url, api_key):
     """Get the channel name and video title of a YouTube video using the YouTube Data API."""
     video_id = video_url.split('v=')[1]
@@ -43,7 +43,7 @@ def get_video_info(video_url, api_key):
     else:
         return f"Error: {response.status_code}"
 
-
+@st.cache_data
 def get_topics(sentiment,num,channel,title):
     data = df[['english_comm']].copy()
     sentiment = sentiment.lower()
@@ -126,7 +126,7 @@ def create_countplot():
 def cached_scraper(youtube_api, video_url):
     return scraper(youtube_api, video_url)
 
-@st.cache_data
+
 def get_word_cloud(df, sentiment):
     sentiment = sentiment.lower()
     if sentiment in ('positive', 'negative', 'neutral'):
@@ -159,7 +159,7 @@ def get_bar_chart(df, sentiment):
 
     fig, ax = plt.subplots(figsize = (10,6))
     ax.barh(words, counts, color = 'skyblue')
-    ax.set_xlabel("Frequncy",fontsize = 12)
+    ax.set_xlabel("Frequency",fontsize = 12)
     ax.set_ylabel("Words",fontsize = 12)
     ax.set_title("Top 15 most frequent keywords",fontsize = 14)
     plt.gca().invert_yaxis() # TO display the highest frequency at the top
@@ -204,19 +204,20 @@ def toggle_plot():
 
     
 youtube_api = st.secrets['YOUTUBE_API_KEY']
-gemini_api  = st.secrets['GEMINI_API_KEY']
+gemini_api = st.secrets['GEMINI_API_KEY']
 
 
 ### Main INterface### ---------------------------------------------------
 
 
-
-st.title("Youtube Comment Sentiment Analyzer")
+st.header("Youtube Comments Sentiment Analyzer")
+_,_,  col = st.columns([1,1,2])
+col.subheader(" -by Siddhant Deokar")
 
 # youtube, gemini, video = st.columns(3)
 
 # youtube_api = youtube.text_input("Enter YouTube API Key", type='password', help="Your YouTube API key for fetching comments")    
-# gemini_api = gemini.text_input("Enter Gemini API Key", type='password', help="Your Gemini API key for topic interpretation")
+# gemini_api = gemini.text_input("Enter Gemini API Key", type='password', help="Your Gemini API key for topic interpretation")trend
 # video_url = video.text_input("Enter Video URL", help="URL of the YouTube video")
 
 video_url = st.text_input("Enter Video URL", help="URL of the YouTube video")
@@ -224,29 +225,29 @@ video_url = st.text_input("Enter Video URL", help="URL of the YouTube video")
 
 
 df = None
-get_data = st.button("Fetch Comments")
 
 
-if youtube_api and gemini_api and video_url:
-    df = cached_scraper(youtube_api, video_url)
+
+if video_url:
+    try:
+        df = cached_scraper(youtube_api, video_url)
+        
+        ## Getting sentiment for 
+        df['sentiment'] = df['english_comm'].apply(get_sentiment)
+        st.session_state.df = df
+        # st.balloons()
     
-    df['english_comm'] = df['english_comm'].apply(clean_with_timestamp)
-    df['english_comm'] = df['english_comm'].str.replace('&#39;', "'", regex=False)
-    
-    ## Getting sentiment for 
-    df['sentiment'] = df['english_comm'].apply(get_sentiment)
-    st.session_state.df = df
-    # st.balloons()
-   
-    genai.configure(api_key=gemini_api)
-    model = genai.GenerativeModel("gemini-1.5-flash")
-    st.success("Data fetched successfully!")
-    video_info = get_video_info(video_url, youtube_api)
-    channel = video_info['channel_name']
-    title = video_info['video_title']
-    st.subheader(f"Channel: {channel}")
-    st.subheader(f"title: {title}")
+        genai.configure(api_key=gemini_api)
+        model = genai.GenerativeModel("gemini-1.5-flash")
+        st.success("Data fetched successfully!")
+        video_info = get_video_info(video_url, youtube_api)
+        channel = video_info['channel_name']
+        title = video_info['video_title']
+        st.subheader(f"Channel: {channel}")
+        st.subheader(f"title: {title}")
 
+    except:
+        st.error("please enter a valid link")
 
 else:
     st.error('Please fill in all the fields.')
