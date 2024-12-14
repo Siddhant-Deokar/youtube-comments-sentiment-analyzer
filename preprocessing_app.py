@@ -3,13 +3,13 @@ from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from nltk.corpus import stopwords   
 import json
 import re
-import spacy
+
 # Initialization of objects that don't need to be recreated each time
 stop_words = stopwords.words('english')
 
 sent_analyzer = SentimentIntensityAnalyzer()  # Sentiment analysis instance
 
-nlp = spacy.load('en_core_web_md')
+
 # Global DataFrame (for the purpose of this example)
 df = 'temp'
 
@@ -64,7 +64,7 @@ def preprocess_text(text):
         text = text.replace(timestamp, f'__TIMESTAMP_{idx}__')
 
     # Tokenize the text
-    doc = nlp(text.lower()) 
+    tokens = word_tokenize(tokens.lower())
 
     
     
