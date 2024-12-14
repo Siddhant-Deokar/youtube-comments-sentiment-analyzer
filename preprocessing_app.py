@@ -7,6 +7,7 @@ import nltk
 # Initialization of objects that don't need to be recreated each time
 nltk.download('vader_lexicon')
 nltk.download('stopwords')
+nltk.download('punkt_tab')
 stop_words = stopwords.words('english')
 
 lemmatizer = WordNetLemmatizer()
