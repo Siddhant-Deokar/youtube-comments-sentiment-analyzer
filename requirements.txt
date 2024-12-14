@@ -44,7 +44,6 @@ tqdm==4.66.5
 regex==2024.9.11
 markdown-it-py==3.0.0
 markdown==3.7
-...
 
 # Optional tools for deployment and debugging
 pytest==7.4.0
