@@ -112,7 +112,6 @@ The project requires the following Python libraries:
 * Seaborn
 * WordCloud
 * Scikit-learn
-* Plotly
 * TextBlob
 * Gensim
   
