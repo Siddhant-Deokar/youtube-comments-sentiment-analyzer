@@ -5,7 +5,11 @@ link:
 https://youtube-comments-sentiment-analyzer.streamlit.app/
 ```
 
+[Demo Video Link](https://www.linkedin.com/posts/siddhant-deokar-18847b24b_datascience-streamlit-sentimentanalysis-activity-7273694340101648384-3UE1?utm_source=share&utm_medium=member_desktop&rcm=ACoAAD3T4jgBG8_LN5vzZcLe3YXGD55TZ_BzFpY)
+
+
 This Streamlit app allows you to scrape YouTube comments from a video, analyze their sentiment, visualize trends, and generate word clouds and topic extraction. 
+
 
 ### Features:
 - **Scrape Comments**: Enter a YouTube video URL, fetch comments, and display the channel name and video title.
