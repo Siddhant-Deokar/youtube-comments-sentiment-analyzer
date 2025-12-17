@@ -93,16 +93,11 @@ desired output format:
     
     response = client.models.generate_content(
         model="gemini-2.5-flash",
-        contents=prompt,
-         generation_config={
-            "response_mime_type": "application/json"
-        }
+        contents=prompt
     )
 
     x = response.text
     x = x.replace("\n", "")
-    x = x.replace("`", "")
-    x = x.replace("json", "")
     return x
 
 
