@@ -238,7 +238,7 @@ if video_url:
         # st.balloons()
     
         genai.configure(api_key=gemini_api)
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        model = genai.GenerativeModel("gemini-2.5-flash")
         st.success("Data fetched successfully!")
         video_info = get_video_info(video_url, youtube_api)
         channel = video_info['channel_name']
