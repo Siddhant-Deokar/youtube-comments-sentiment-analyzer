@@ -1,13 +1,13 @@
 import streamlit as st
 from gensim import corpora
 from gensim.models import LdaModel
-import google.generativeai as genai
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scraping_comments import scraper
 from preprocessing_app import clean_with_timestamp,get_sentiment, preprocess_text, print_topics, generate_summary
 import requests
+from google import genai
 
 
 
@@ -19,6 +19,12 @@ if 'show_plot' not in st.session_state:
 
 if 'show_trend' not in st.session_state:
     st.session_state.show_trend = True
+
+
+youtube_api = st.secrets['YOUTUBE_API_KEY']
+gemini_api = st.secrets['GEMINI_API_KEY']
+
+client = genai.Client(api_key=gemini_api)
 
 
 
@@ -43,34 +49,27 @@ def get_video_info(video_url, api_key):
     else:
         return f"Error: {response.status_code}"
 
-# @st.cache_data
-def get_topics(sentiment,num,channel,title,model):
-    data = df[['english_comm']].copy()
-    sentiment = sentiment.lower()
-    # Filter the DataFrame based on the sentiment
-    if sentiment.lower() in ('positive','neutral','negative'):
-        data = df[df['sentiment'].str.lower().str.contains(sentiment)]
+def get_topics(df, sentiment, num, channel, title, client):
+    
+    data = df.copy()
 
+    if sentiment.lower() in ('positive', 'neutral', 'negative'):
+        data = data[data['sentiment'].str.lower().str.contains(sentiment)]
+    
     topic_data = data['english_comm'].apply(preprocess_text).tolist()
     id2word = corpora.Dictionary(topic_data)
     corpus = [id2word.doc2bow(doc) for doc in topic_data]
-    
-    # alpha_values = ['auto', 0.001, 0.01]
-    # coherence_scores = []
-    
-    # for alpha in alpha_values:
-    #     lda_model = LdaModel(corpus=corpus, id2word=id2word, random_state=1, num_topics= num, alpha=alpha, passes=10)
-    #     coherence_model = CoherenceModel(model=lda_model, texts=topic_data, dictionary=id2word, coherence='c_v')
-    #     coherence_score = coherence_model.get_coherence()
-    #     coherence_scores.append((alpha, coherence_score))
 
-    # best_alpha = sorted(coherence_scores, key=lambda x: x[1], reverse=True)[0][0]
-    # lda_model = LdaModel(corpus=corpus, id2word=id2word, random_state=1, num_topics= num, alpha=best_alpha, passes=10)
-
-    lda_model = LdaModel(corpus=corpus, id2word=id2word, random_state=1, num_topics= num, alpha='auto', passes=10)
+    lda_model = LdaModel(
+        corpus=corpus,
+        id2word=id2word,
+        random_state=1,
+        num_topics=num,
+        alpha='auto',
+        passes=10
+    )
 
     topics = lda_model.print_topics()
-    
 
     prompt = f"""
 Analyze the following topics extracted from YouTube video comments for the channel "{channel}" and video title "{title}". 
@@ -90,24 +89,18 @@ desired output format:
 
 **These are the Topics:**
 {topics}
-"""
-
-    # prompt = f"""I've performed topic modeling on YouTube video comments. channel name : {channel}, video title: {title}. Please interpret the following topics in key-value pairs as the given format. Provide the output directly, without intro or conclusion. Try to interpret the context of comments based on real facts, channel name, video title(not necessary).
-
-    # {{"Topic 0":
-    # {{Keywords: ["keyword 1", "keyword 2", "keyword 3" , ...],
-    # Interpretation: "..."
-    # }}, ...}}
-
-    # Topics:  {topics} """
-    response = model.generate_content(prompt)
+    """
+    
+    response = client.models.generate_content(
+        model="gemini-2.5-flash",
+        contents=prompt
+    )
 
     x = response.text
-    x = x.replace("\n","")
-    x = x.replace("`","")
-    x = x.replace('json',"")
+    x = x.replace("\n", "")
+    x = x.replace("`", "")
+    x = x.replace("json", "")
     return x
-
 
 
 def create_countplot():
@@ -203,11 +196,7 @@ def toggle_plot():
 
 
     
-youtube_api = st.secrets['YOUTUBE_API_KEY']
-gemini_api = st.secrets['GEMINI_API_KEY']
 
-genai.configure(api_key=gemini_api)
-model = genai.GenerativeModel("gemini-1.5-flash")
 
 ### Main INterface### ---------------------------------------------------
 
@@ -341,7 +330,7 @@ if df is not None:
             else:
                 st.subheader(f"{topic_sentiment}")
         
-            x = get_topics(topic_sentiment, num,channel, title, model )
+            x = get_topics(df, topic_sentiment, num,channel, title, client )
             st.markdown(print_topics(x), unsafe_allow_html=True)
             # st.write(x)
 
