@@ -74,14 +74,23 @@ def get_topics(df, sentiment, num, channel, title, client):
     prompt = f"""
 Analyze the following topics extracted from YouTube video comments for the channel "{channel}" and video title "{title}". 
 You can also set the overall context based on the keywords if possible
-Provide interpretations in key-value pairs, directly outputting the results without any introductory or concluding text. 
+Provide brief and concise(not too long) interpretations in key-value pairs, directly outputting the results without any introductory or concluding text. 
 
 set context of the interpretations based on:
 1. **Real-world facts and current events** 
 2. **Specific context of the channel and video title**
 
+Return ONLY valid JSON.
+
+Rules:
+- Use double quotes for ALL keys and string values
+- Do NOT include markdown
+- Do NOT include comments
+- Do NOT include trailing commas
+- Do NOT include explanations or extra text
+
 desired output format:
-    {{"Topic 0":
+    {{"Topic 1":
     {{Keywords: ["keyword 1", "keyword 2", "keyword 3" , ...],
     Interpretation: "..."
     }}, ...}}
