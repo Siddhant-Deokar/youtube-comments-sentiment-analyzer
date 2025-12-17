@@ -44,7 +44,7 @@ def get_video_info(video_url, api_key):
         return f"Error: {response.status_code}"
 
 # @st.cache_data
-def get_topics(sentiment,num,channel,title):
+def get_topics(sentiment,num,channel,title,model):
     data = df[['english_comm']].copy()
     sentiment = sentiment.lower()
     # Filter the DataFrame based on the sentiment
@@ -340,7 +340,7 @@ if df is not None:
             else:
                 st.subheader(f"{topic_sentiment}")
         
-            x = get_topics(topic_sentiment, num,channel, title )
+            x = get_topics(topic_sentiment, num,channel, title, model )
             st.markdown(print_topics(x), unsafe_allow_html=True)
             # st.write(x)
 
