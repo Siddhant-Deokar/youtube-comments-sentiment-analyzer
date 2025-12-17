@@ -53,8 +53,8 @@ def get_topics(df, sentiment, num, channel, title, client):
     
     data = df.copy()
 
-    if sentiment.lower() in ('positive', 'neutral', 'negative'):
-        data = data[data['sentiment'].str.lower().str.contains(sentiment)]
+    if sentiment in ('Positive', 'Neutral', 'Negative'):
+        data = data[data['sentiment'] == sentiment]
     
     topic_data = data['english_comm'].apply(preprocess_text).tolist()
     id2word = corpora.Dictionary(topic_data)
@@ -328,19 +328,15 @@ if df is not None:
 
     get_topics_check = st.checkbox("Get Topics")
     if get_topics_check:
-        if topic_sentiment and topic_sentiment.lower() not in ('','positive', 'neutral', 'negative'):
-            st.error("Invalid sentiment. Please choose from 'positive', 'neutral', or 'negative'.")
-
+    
+        if topic_sentiment == '':
+            st.subheader(f"Full Data Topics")
         else:
-            if topic_sentiment == '':
-                st.subheader(f"Full Data Topics")
-            else:
-                st.subheader(f"{topic_sentiment}")
-        
-            x = get_topics(df, topic_sentiment, num,channel, title, client )
-            st.markdown(print_topics(x), unsafe_allow_html=True)
-            # st.write(x)
-
+            st.subheader(f"{topic_sentiment}")
+    
+        x = get_topics(df, topic_sentiment, num,channel, title, client )
+        st.markdown(print_topics(x), unsafe_allow_html=True)
+        # st.write(x)
 
 
 
