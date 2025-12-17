@@ -43,7 +43,7 @@ def get_video_info(video_url, api_key):
     else:
         return f"Error: {response.status_code}"
 
-@st.cache_data
+# @st.cache_data
 def get_topics(sentiment,num,channel,title):
     data = df[['english_comm']].copy()
     sentiment = sentiment.lower()
