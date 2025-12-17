@@ -236,9 +236,6 @@ if video_url:
         df['sentiment'] = df['english_comm'].apply(get_sentiment)
         st.session_state.df = df
         # st.balloons()
-    
-        genai.configure(api_key=gemini_api)
-        model = genai.GenerativeModel("gemini-2.5-flash")
         st.success("Data fetched successfully!")
         video_info = get_video_info(video_url, youtube_api)
         channel = video_info['channel_name']
@@ -327,7 +324,7 @@ if df is not None:
     st.header("Topics")
     
     genai.configure(api_key=gemini_api)
-    model = genai.GenerativeModel("gemini-2.5-flash")
+    model = genai.GenerativeModel("gemini-1.5-flash")
     num = st.slider("Number of topics",2,5,3)
 
     topic_sentiment = st.selectbox("Enter Topic Sentiment (leave blank to choose whole data)",['','Positive','Neutral','Negative'], key ='topic_sentiment')
