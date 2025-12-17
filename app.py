@@ -206,6 +206,8 @@ def toggle_plot():
 youtube_api = st.secrets['YOUTUBE_API_KEY']
 gemini_api = st.secrets['GEMINI_API_KEY']
 
+genai.configure(api_key=gemini_api)
+model = genai.GenerativeModel("gemini-1.5-flash")
 
 ### Main INterface### ---------------------------------------------------
 
@@ -323,8 +325,7 @@ if df is not None:
 
     st.header("Topics")
     
-    genai.configure(api_key=gemini_api)
-    model = genai.GenerativeModel("gemini-1.5-flash")
+
     num = st.slider("Number of topics",2,5,3)
 
     topic_sentiment = st.selectbox("Enter Topic Sentiment (leave blank to choose whole data)",['','Positive','Neutral','Negative'], key ='topic_sentiment')
